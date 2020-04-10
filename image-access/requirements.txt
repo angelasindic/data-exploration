@@ -3,6 +3,5 @@ ipykernel
 sentinelsat
 rasterio
 folium
-# git+git://github.com/geopandas/geopandas.git
 geopandas
 descartes
