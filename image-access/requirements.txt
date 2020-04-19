@@ -5,3 +5,6 @@ rasterio
 folium
 geopandas
 descartes
+netCDF4
+Pillow
+scipy
