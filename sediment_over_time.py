@@ -17,3 +17,4 @@ for folder_name in os.listdir():
             df_temp.loc[1] = [folder_name] + [len(sediment)*100/1000000]
             df = pd.concat([df, df_temp])
             
+df.to_csv('sediment_over_time.csv', index=False)
