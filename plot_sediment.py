@@ -1,8 +1,5 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[ ]:
-
+import pandas as pd
+import matplotlib.pyplot as plt
 
 df = pd.read_csv('sediment_over_all_time.csv')
 
