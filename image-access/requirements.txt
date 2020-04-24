@@ -8,3 +8,4 @@ descartes
 netCDF4
 Pillow
 scipy
+scikit-learn
