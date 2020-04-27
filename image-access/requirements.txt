@@ -9,3 +9,4 @@ netCDF4
 Pillow
 scipy
 #urllib3
+geopandas
