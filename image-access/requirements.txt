@@ -10,3 +10,4 @@ Pillow
 scipy
 #urllib3
 geopandas
+scikit-learn
