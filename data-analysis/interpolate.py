@@ -37,7 +37,7 @@ def main():
     root_dir = '/data/results/batch_run'
     date = '' #all dates included.
     algorithm = 'spm_nechad2016'
-    factor = 5
+    factor = 50
     order = 0
     values = aggregate_values(root_dir, date, algorithm, factor, order)
     ###########################
@@ -55,7 +55,7 @@ def main():
     plt.ylabel('# NaN Values')
     # of cause not working on vm
     # plt.show()
-    plt.savefig('nan_values_interpolated.png')
+    plt.savefig('nan_values_interpolated_50.png')
 
 
 
