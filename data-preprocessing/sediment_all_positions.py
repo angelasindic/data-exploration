@@ -17,8 +17,8 @@ for folder_name in os.listdir():
             nc = Dataset(file_name)
             ds = list(nc.variables.keys())
             dataset = ds[3] 
-            data_temp = nc.variables[dataset][:]
-            data = data_temp.flatten()
+            data_temp = nc.variables[dataset][:][300:500, 1200:1500] #select a small part close to the coast
+            data = data_temp.flatten('C') #‘C’ means to flatten in row-major (C-style) order
             df_temp.loc[1] = [data]
             df_new = pd.DataFrame(df_temp['sediment(km2)'].values.tolist())
             df_new['date'] = folder_name
