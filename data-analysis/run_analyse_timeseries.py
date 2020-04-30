@@ -8,7 +8,9 @@ def main():
 
     ###########################
     ## provide parameter values:
-    root_dir = 'data/l2w'
+    #root_dir = 'data/l2w'
+    root_dir = '/data/results/batch_run'
+
     date = '' #all dates included.
     algorithm = 'spm_nechad2016'
     ###########################
