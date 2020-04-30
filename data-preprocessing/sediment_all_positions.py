@@ -24,5 +24,5 @@ for folder_name in os.listdir():
             df_new['date'] = folder_name
             df = pd.concat([df, df_new])
 
-df.to_csv('pd_sediment.csv', index=False)      
+df.to_csv('pd_sediment2.csv', index=False)      
 
