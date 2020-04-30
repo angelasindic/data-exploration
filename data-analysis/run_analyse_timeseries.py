@@ -26,7 +26,7 @@ def main():
     ## call functions
     nan_values = read_netcdf_results.count_nans(values)
     best_index = analyse_timeseries.get_best_index(nan_values)
-    print("Index {best_index} has lowest count of nan values: {nan_values[best_index]}")
+    print(f"Index {best_index} has lowest count of nan values: {nan_values[best_index]}")
     ###########################
 
     ############# plot nan-values array #############
@@ -36,7 +36,9 @@ def main():
     fig.set_cmap(plt.cm.RdBu_r)
     plt.colorbar()
     plt.ylabel('# NaN Values')
-    plt.show()
+    # of cause not working on vm
+    #plt.show()
+    plt.savefig('nan_values.png')
 
 
 if __name__ == "__main__":
