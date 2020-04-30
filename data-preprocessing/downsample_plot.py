@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-df_total = pd.read_csv('df_mean_std_missing.csv')
+df_total = pd.read_csv('df_mean_std_missing')
 
 
 image_mean = np.array(df_total['mean']).reshape([2946, 2718])
