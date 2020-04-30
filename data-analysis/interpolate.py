@@ -55,7 +55,7 @@ def main():
     plt.ylabel('# NaN Values')
     # of cause not working on vm
     # plt.show()
-    plt.savefig('nan_values.png')
+    plt.savefig('nan_values_interpolated.png')
 
 
 
