@@ -32,8 +32,7 @@ def add_dates(df):
 
     all_time = []
     for i in range(no_circles):
-        temp = df['DateTime'].iloc[1] + i * 
-        timedelta(days=5)
+        temp = df['DateTime'].iloc[1] + i * timedelta(days=5)
         all_time.append(temp)
         df_new = pd.DataFrame(all_time, columns =['DateTime'])
 
