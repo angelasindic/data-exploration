@@ -13,12 +13,14 @@ import pandas as pd
 
 from sediment_all_positions import read_data
 from add_dates import add_dates
-from stats import stats_custom
+from stats import stats_custom, calculate_stats
 
 root_dir = '/data/results/batch_run'
-#df = read_data(root_dir, variable = 'spm_nechad2016', nlats = 2946, nlons = 2718)
+df = read_data(root_dir, variable = 'spm_nechad2016', nlats = 2946, nlons = 2718)
+df_total = calculate_stats(df)
+
 #df_all_dates = add_dates(df)
-#df_total = stats_custom(df)
+
 
 #df_total = pd.read_csv('df_mean_std_missing')
 
