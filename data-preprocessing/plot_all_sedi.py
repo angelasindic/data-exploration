@@ -17,6 +17,10 @@ def restrain_area(df, threshold = 5):
     ----------
     df : DateFrame
         the dataframe that contains date as one column and other columns representing sedimentation per location 
+        
+    threshold : int
+        this theshold is used to filter the pixels/positions based on the mean value of the sediment values.
+        default value is 5. if the sediment values are lower than this treshold, it is classified as waters.
     
     Returns
     -------
@@ -35,6 +39,7 @@ def restrain_area(df, threshold = 5):
   # replace the mean with NaNs, if the percentage of NaNs for the locaton exceeds 80%
   df_index.loc[df_index['missing'] > 80, 'mean'] = float('nan') # if the percentage of NaN higher than 80%, then mean is NaN
   
+  # drop the pixel/positions that are either land or considered as waters
   columns_to_drop = list(df_index[df_index['mean'] < threshold].index) + list(df_index[np.isnan(df_index['mean']) == True].index)
   df_relevant = df.drop(columns_to_drop, axis = 1)  
 
