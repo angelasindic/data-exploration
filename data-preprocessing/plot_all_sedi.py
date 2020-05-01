@@ -110,3 +110,32 @@ def plot_positions(df_all_dates): # year = '', location = []  # need to add year
 
 # def monthly_average():
 # use smoothing to generate the monthly average, so there is no absent values
+# if there is still missing values, do interpolation 
+# df_interpolate = df.drop(['DateTime'], axis = 1)
+# df_interpolated = df_interpolate.interpolate(method ='linear', limit_direction ='forward')
+# df_new = pd.concat([df[['DateTime']], df_interpolated], axis = 1)
+# df_clean = df_new.dropna()
+
+def sediment_average_over_time(df):
+  """
+    Summary line.
+    Extended description of function.
+    Parameters
+    ----------
+    df : DataFrame
+        a dataframe that contains all dates and each position with the sediment value as the column
+    Returns
+    -------
+    df_average : DataFrame
+        a dataFrame that represents the average sedimentation over time, with the index of date 
+    
+    """
+  
+  df['mean'] = df.drop('DateTime', axis=1).apply(lambda x: x.mean(), axis=1)
+  #img = df.plot(x='DateTime', y= 'mean', figsize=(10,5), grid=True)
+  df = df.set_index('DateTime')
+  df_average = df[['mean']]
+  
+  return df_average
+
+  
