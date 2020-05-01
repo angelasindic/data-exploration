@@ -94,4 +94,4 @@ def plot_positions(df_all_dates): # year = '', location = []  # need to add year
     plt.title('sediment per location over time')
     plt.savefig('sediment_per_location_overtime.jpg')
     
-    return plt.show()
+    return plt.show(). # can you return plt.show()?
