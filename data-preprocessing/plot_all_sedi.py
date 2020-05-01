@@ -1,4 +1,3 @@
-# the missing dates are filled in, with a cycle of every 5 days
 # the sediment time series for different positions are plotted together for comparison
 
 import pandas as pd
