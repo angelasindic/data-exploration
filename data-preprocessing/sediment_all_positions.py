@@ -34,7 +34,7 @@ def read_data(root_dir, variable = 'spm_nechad2016', nlats = 2946, nlons = 2718)
     """
     
     df = pd.DataFrame()
-    for folder_name in root_dir:
+    for folder_name in os.listdir(root_dir):
         product_path = glob.glob(root_dir + '/' + folder_name + '/*L2W.nc')
         if '-' in folder_name: 
             for file_name in product_path:
