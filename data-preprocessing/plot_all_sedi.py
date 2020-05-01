@@ -26,10 +26,14 @@ def restrain_area(df, threshold = 5):
   
   df_index = pd.DataFrame() # create an emopty dataframe
 
-  df1 = df.drop(['date'], axis=1)
+  df1 = df.drop(['DateTime'], axis=1)
 
   # calculate mean 
   df_index['mean'] = df1.mean(axis = 0, skipna=True)
+  df_index['missing'] = df1.isnull().sum() * 100 / len(df1) # represents xx percentage of the values are NaNs
+
+  # replace the mean with NaNs, if the percentage of NaNs for the locaton exceeds 80%
+  df_index.loc[df_index['missing'] > 80, 'mean'] = float('nan') # if the percentage of NaN higher than 80%, then mean is NaN
     
   columns_to_drop = list(df_index[df_index['mean'] < threshold].index) + list(df_index[df_index['mean'] == float('nan')].index)
 
