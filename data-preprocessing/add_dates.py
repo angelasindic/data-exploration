@@ -8,7 +8,7 @@ import numpy as np
 from sediment_all_positions import read_data
 
 root_dir = '/data/results/batch_run'
-df = read_data(root_dir, variable = 'spm_nechad2016', nlats = 2946, nlons = 2718)
+#df = read_data(root_dir, variable = 'spm_nechad2016', nlats = 2946, nlons = 2718)
 
 
 def add_dates(df):
