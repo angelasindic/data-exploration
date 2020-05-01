@@ -1,4 +1,5 @@
-# downsample the image based on the mean of each position, by a degree of 6
+# downsample the image based on the mean of each position, by a degree of 6-> 60m*60m
+   # -> appximate coral outplanting site ~3000 m2
 # also because both dimensions [2946, 2718] are divisbile by 6
 # need to fix about the coastline, since after downsampling, some lands close to coastlines will be classified as water.
    # not a big issue: false positive not expensive here, they will not plant corals on land!
