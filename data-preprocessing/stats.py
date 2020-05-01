@@ -44,4 +44,4 @@ def calculate_stats(df):
 
   return df_total
 
-#df_total.to_csv('df_mean_std_missing', index = False)
+#df_total.to_csv(root_dir + '/' + 'df_mean_std_missing.csv', index = False)
