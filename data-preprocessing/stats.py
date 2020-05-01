@@ -1,4 +1,5 @@
 # calculate the mean, std, and the missing values for each position
+# if the percentage of NaN for a location is higher than 80%, then the mean is replaced with NaN, representing land
 
 import os
 import pandas as pd
