@@ -9,6 +9,35 @@ from sediment_all_positions import read_data
 
 df = read_data(root_dir = os.listdir(), nlats = 2946, nlons = 2718) # read in the csv data that has all the sediment
 
+def restrain_area(df, threshold = 5):
+  """
+    Summary line.
+    Extended description of function.
+    Parameters
+    ----------
+    df : DateFrame
+        the dataframe that contains date as one column and other columns representing sedimentation per location 
+    
+    Returns
+    -------
+    df_relevant : DataFrame
+        A subset of dataframe/areas where sediment actually appears. So the land and the ocean areas are excluded
+    """
+  
+  df_index = pd.DataFrame() # create an emopty dataframe
+
+  df1 = df.drop(['date'], axis=1)
+
+  # calculate mean 
+  df_index['mean'] = df1.mean(axis = 0, skipna=True)
+    
+  columns_to_drop = list(df_index[df_index['mean'] < threshold].index) + list(df_index[df_index['mean'] == float('nan')].index)
+
+  df_relevant = df.drop(columns_to_drop, axis = 1)
+  
+  return df_relevant
+
+
 def add_dates(df):
     """
     Summary line.
