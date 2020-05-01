@@ -34,12 +34,12 @@ def restrain_area(df, threshold = 5):
 
   # replace the mean with NaNs, if the percentage of NaNs for the locaton exceeds 80%
   df_index.loc[df_index['missing'] > 80, 'mean'] = float('nan') # if the percentage of NaN higher than 80%, then mean is NaN
-    
-  columns_to_drop = list(df_index[df_index['mean'] < threshold].index) + list(df_index[df_index['mean'] == float('nan')].index)
-
-  df_relevant = df.drop(columns_to_drop, axis = 1)
   
+  columns_to_drop = list(df_index[df_index['mean'] < threshold].index) + list(df_index[np.isnan(df_index['mean']) == True].index)
+  df_relevant = df.drop(columns_to_drop, axis = 1)  
+
   return df_relevant
+
 
 
 def add_dates(df):
