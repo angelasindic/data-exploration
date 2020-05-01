@@ -4,7 +4,7 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-
+import datetime as dt
 from sediment_all_positions import read_data
 
 root_dir = '/data/results/batch_run'
