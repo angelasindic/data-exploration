@@ -16,8 +16,8 @@ from add_dates import add_dates
 from stats import stats_custom, calculate_stats
 
 root_dir = '/data/results/batch_run'
-df = read_data(root_dir, variable = 'spm_nechad2016', nlats = 2946, nlons = 2718)
-df_total = calculate_stats(df)
+#df = read_data(root_dir, variable = 'spm_nechad2016', nlats = 2946, nlons = 2718)
+#df_total = calculate_stats(df)
 
 #df_all_dates = add_dates(df)
 
