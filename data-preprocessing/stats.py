@@ -5,7 +5,7 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-
+from datetime import datetime
 from sediment_all_positions import read_data
 from add_dates import add_dates
 
@@ -47,7 +47,7 @@ def calculate_stats(df):
   return df_total
 
 
-def stats_custom(df, start_time = '', ending_time = ''):
+def stats_custom(df, start_time = '2019-10', ending_time = '2020-03'):
   """
     Summary line.
     Extended description of function.
@@ -71,14 +71,25 @@ def stats_custom(df, start_time = '', ending_time = ''):
   
   df_total = pd.DataFrame() # create an emopty dataframe
   
-  df1 = df.drop(['date'], axis=1)
+  df['DateTime'] = pd.to_datetime(df['date']) # make sure that this dateframe has bee sorted according to datetime
+  df = df.drop(['date'], axis=1).sort_values(["DateTime"], ascending = (True))
+  
+  # get the month-year as a separate column
+  df['month_year'] = pd.to_datetime(df['DateTime']).dt.to_period('M')
+  
+  
+  idx_start = df[df['month_year']== start_time].index.item() #double check about this
+  idx_end = df[df['month_year']== end_time].index.item()
+  
+  df_select = df[idx_start, idx_end].drop(['DateTime'], axis=1)
 
-  # calculate mean, std for each position 
-  df_total['mean'] = df1.mean(axis = 0, skipna=True)
-  df_total['std'] = df1.std(axis = 0, skipna=True)
+  # calculate mean, std for each time period
+  
+  df_total['mean'] = df_select.mean(axis = 0, skipna=True)
+  df_total['std'] = df_select.std(axis = 0, skipna=True)
 
   # calculate percentage of missing values
-  df_total['missing'] = df1.isnull().sum() * 100 / len(df1) # represents xx percentage of the values are NaNs
+  df_total['missing'] = df_select.isnull().sum() * 100 / len(df_select) # represents xx percentage of the values are NaNs
 
   # replace the mean with NaNs, if the percentage of NaNs for the locaton exceeds 80%
   df_total.loc[df_total['missing'] > 80, 'mean'] = float('nan') # if the percentage of NaN higher than 80%, then mean is NaN
