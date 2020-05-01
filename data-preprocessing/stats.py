@@ -1,3 +1,5 @@
+# calculate the mean, std, and the missing values for each position
+
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
