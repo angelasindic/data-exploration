@@ -9,4 +9,6 @@ select_col = [col for col in df.columns if col != 'date']
 
 df.plot(x='date', y= select_col, figsize=(10,5), grid=True)
 
-plt.savefig('all_sediment_overtime.png')
+plt.savefig('sediment_per_location_overtime.jpg')
+plt.show()
+plt.title('sediment per location over time')
