@@ -7,9 +7,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from sediment_all_positions import read_data
+from add_dates import add_dates
 
 root_dir = '/data/results/batch_run'
 df = read_data(root_dir, variable = 'spm_nechad2016', nlats = 2946, nlons = 2718)
+df_all_dates = add_dates(df)
 
 def calculate_stats(df):
   """
@@ -28,6 +30,48 @@ def calculate_stats(df):
     """
   
   df_total = pd.DataFrame() # create an emopty dataframe
+
+  df1 = df.drop(['date'], axis=1)
+
+  # calculate mean, std for each position 
+  df_total['mean'] = df1.mean(axis = 0, skipna=True)
+  df_total['std'] = df1.std(axis = 0, skipna=True)
+
+  # calculate percentage of missing values
+  df_total['missing'] = df1.isnull().sum() * 100 / len(df1) # represents xx percentage of the values are NaNs
+
+  # replace the mean with NaNs, if the percentage of NaNs for the locaton exceeds 80%
+  df_total.loc[df_total['missing'] > 80, 'mean'] = float('nan') # if the percentage of NaN higher than 80%, then mean is NaN
+  df_total.loc[df_total['missing'] > 80, 'std'] = float('nan') # if the percentage of NaN higher than 80%, then std is NaN
+
+  return df_total
+
+
+def stats_custom(df, start_time = '', ending_time = ''):
+  """
+    Summary line.
+    Extended description of function.
+    Parameters
+    ----------
+    df : DateFrame
+        the dataframe that contains date as one column and other columns representing sedimentation per location
+    
+    start_time : str
+        the date from which we want to calcuate the mean, std and missing values
+        
+    end_time : str
+        the date until which we want to calcuate the mean, std and missing values
+    
+    Returns
+    -------
+    df_total : DataFrame
+        Columns of the dataframe are mean, std of the sediment values, and missing percentage of NaNs.
+        Each row contains values for each location.
+    """
+  
+  df_total = pd.DataFrame() # create an emopty dataframe
+  
+  
 
   df1 = df.drop(['date'], axis=1)
 
