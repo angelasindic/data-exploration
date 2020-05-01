@@ -11,6 +11,20 @@ from sediment_all_positions import read_data
 df = read_data(root_dir = os.listdir(), nlats = 2946, nlons = 2718)
 
 def calculate_stats(df):
+  """
+    Summary line.
+    Extended description of function.
+    Parameters
+    ----------
+    df : DateFrame
+        the dataframe that contains date as one column and other columns representing sedimentation per location 
+    
+    Returns
+    -------
+    df_total : DataFrame
+        Columns of the dataframe are mean, std of the sediment values, and missing percentage of NaNs.
+        Each row contains values for each location.
+    """
   
   df_total = pd.DataFrame() # create an emopty dataframe
 
