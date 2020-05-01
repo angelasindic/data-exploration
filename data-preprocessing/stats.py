@@ -10,8 +10,8 @@ from sediment_all_positions import read_data
 from add_dates import add_dates
 
 root_dir = '/data/results/batch_run'
-df = read_data(root_dir, variable = 'spm_nechad2016', nlats = 2946, nlons = 2718)
-df_all_dates = add_dates(df)
+#df = read_data(root_dir, variable = 'spm_nechad2016', nlats = 2946, nlons = 2718)
+#df_all_dates = add_dates(df)
 
 def calculate_stats(df):
   """
@@ -71,8 +71,6 @@ def stats_custom(df, start_time = '', ending_time = ''):
   
   df_total = pd.DataFrame() # create an emopty dataframe
   
-  
-
   df1 = df.drop(['date'], axis=1)
 
   # calculate mean, std for each position 
