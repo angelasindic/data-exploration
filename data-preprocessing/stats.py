@@ -32,7 +32,7 @@ def calculate_stats(df):
   
   df_total = pd.DataFrame() # create an emopty dataframe
 
-  df1 = df.drop(['date'], axis=1)
+  df1 = df.drop(['DateTime'], axis=1)
 
   # calculate mean, std for each position 
   df_total['mean'] = df1.mean(axis = 0, skipna=True)
@@ -72,8 +72,7 @@ def stats_custom(df, start_time = '2019-10', ending_time = '2020-03'):
   
   df_total = pd.DataFrame() # create an emopty dataframe
   
-  df['DateTime'] = pd.to_datetime(df['date']) # make sure that this dateframe has bee sorted according to datetime
-  df = df.drop(['date'], axis=1).sort_values(["DateTime"], ascending = (True))
+  df = df.sort_values(["DateTime"], ascending = (True))
   
   # get the month-year as a separate column
   df['month_year'] = pd.to_datetime(df['DateTime']).dt.to_period('M')
