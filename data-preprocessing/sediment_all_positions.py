@@ -8,7 +8,7 @@ import pandas as pd
 from netCDF4 import Dataset
 import numpy as np
 
-def read_data(root_dir = os.listdir(), nlats = 2946, nlons = 2718):
+def read_data(root_dir = os.listdir(), variable = 'spm_nechad2016', nlats = 2946, nlons = 2718):
     """
     Summary line.
     Extended description of function.
@@ -16,6 +16,13 @@ def read_data(root_dir = os.listdir(), nlats = 2946, nlons = 2718):
     ----------
     root_dir : str
         Starting point to locate the folder of the result files, each folder represents the date of satellite image
+    variable : str
+        Variable name specifying the algorithm used: spm_nechad2016, t_nechad2016, t_dogliotti, fai.
+        The default is spm_nechad2016
+    nlats : int
+        Dimension of the longitudes, for the default the original value of 2946 is used.
+    nlons : int
+        Dimension of the latitudes, for the default the original value of 2718 is used.
     Returns
     -------
     DataFrame
@@ -30,10 +37,8 @@ def read_data(root_dir = os.listdir(), nlats = 2946, nlons = 2718):
         product_path = glob.glob(os.getcwd()+ '/' + folder_name + '/*L2W.nc')
         if '-' in folder_name: 
             for file_name in product_path:
-                nc = Dataset(file_name)
-                ds = list(nc.variables.keys())
-                dataset = ds[3] 
-                data_temp = nc.variables[dataset][:]
+                nc = Dataset(file_name) 
+                data_temp = nc.variables[variable][:]
                 data = data_temp.flatten('C') # flatten to a 1D array
                 data_split = np.ma.hsplit(data, 1) # split into multiple array
                 df_temp = pd.DataFrame(data_split)
