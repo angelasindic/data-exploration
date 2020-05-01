@@ -39,6 +39,7 @@ def calculate_stats(df):
 
   # replace the mean with NaNs, if the percentage of NaNs for the locaton exceeds 80%
   df_total.loc[df_total['missing'] > 80, 'mean'] = float('nan') # if the percentage of NaN higher than 80%, then mean is NaN
+  df_total.loc[df_total['missing'] > 80, 'std'] = float('nan') # if the percentage of NaN higher than 80%, then std is NaN
 
   return df_total
 
