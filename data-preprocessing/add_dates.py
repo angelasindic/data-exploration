@@ -4,7 +4,7 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-import datetime as dt
+from datetime import datetime, timedelta 
 from sediment_all_positions import read_data
 
 root_dir = '/data/results/batch_run'
@@ -28,11 +28,12 @@ def add_dates(df):
     df['DateTime'] = pd.to_datetime(df['date']) # make sure that this dateframe has bee sorted according to datetime
     df = df.drop(['date'], axis=1).sort_values(["DateTime"], ascending = (True))
 
-    no_circles = int((df['DateTime'].iloc[-1] - df['DateTime'].iloc[1]) / dt.timedelta(days=5)) + 1
+    no_circles = int((df['DateTime'].iloc[-1] - df['DateTime'].iloc[1]) / timedelta(days=5)) + 1
 
     all_time = []
     for i in range(no_circles):
-        temp = df['DateTime'].iloc[1] + i * dt.timedelta(days=5)
+        temp = df['DateTime'].iloc[1] + i * 
+        timedelta(days=5)
         all_time.append(temp)
         df_new = pd.DataFrame(all_time, columns =['DateTime'])
 
