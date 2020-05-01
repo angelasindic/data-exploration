@@ -8,7 +8,8 @@ import pandas as pd
 from netCDF4 import Dataset
 import numpy as np
 
-def read_data(root_dir = os.listdir(), variable = 'spm_nechad2016', nlats = 2946, nlons = 2718):
+root_dir = '/data/results/batch_run'
+def read_data(root_dir, variable = 'spm_nechad2016', nlats = 2946, nlons = 2718):
     """
     Summary line.
     Extended description of function.
@@ -34,7 +35,7 @@ def read_data(root_dir = os.listdir(), variable = 'spm_nechad2016', nlats = 2946
     
     df = pd.DataFrame()
     for folder_name in root_dir:
-        product_path = glob.glob(os.getcwd()+ '/' + folder_name + '/*L2W.nc')
+        product_path = glob.glob(root_dir + '/' + folder_name + '/*L2W.nc')
         if '-' in folder_name: 
             for file_name in product_path:
                 nc = Dataset(file_name) 
