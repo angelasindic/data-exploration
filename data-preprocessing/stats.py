@@ -5,7 +5,6 @@ import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-from PIL import Image
 
 # calculate mean, std, and missing percentage
 
