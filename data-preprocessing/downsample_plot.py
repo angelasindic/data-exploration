@@ -11,21 +11,55 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-df_total = pd.read_csv('df_mean_std_missing')
+from sediment_all_positions import read_data
+from add_dates import add_dates
+from stats import stats_custom
 
+root_dir = '/data/results/batch_run'
+#df = read_data(root_dir, variable = 'spm_nechad2016', nlats = 2946, nlons = 2718)
+#df_all_dates = add_dates(df)
+#df_total = stats_custom(df)
 
-image_mean = np.array(df_total['mean']).reshape([2946, 2718])
-image_std = np.array(df_total['std']).reshape([2946, 2718])
+#df_total = pd.read_csv('df_mean_std_missing')
 
+def down_sample(df, degree = 6):
+   
+   """
+    Summary line.
+    Extended description of function.
+    Parameters
+    ----------
+    df : DateFrame
+        the dataframe that contains mean, std of sedimentation and percentage of NaNs per location 
+    
+    degree : int
+        down-sampling degree. Default is 6
+    
+    Returns
+    -------
+    (image_mean_down, image_std_down)
+        turple of 2-d arrays, each representing the downsampled mean and std
+    """
+   
+   image_mean = np.array(df['mean']).reshape([2946, 2718])
+   image_std = np.array(df['std']).reshape([2946, 2718])
 
+   
+   shape = [2946 // degree, 2718 // degree]
+   
+   def rebin(a, shape):
+       sh = shape[0],a.shape[0]//shape[0],shape[1],a.shape[1]//shape[1]
+       return a.reshape(sh).mean(-1).mean(1)
 
-def rebin(a, shape):
-    sh = shape[0],a.shape[0]//shape[0],shape[1],a.shape[1]//shape[1]
-    return a.reshape(sh).mean(-1).mean(1)
+   # down_sampled to 60m  * 60m, equivalent to reef site size
+   image_mean_down = rebin(image_mean, shape)   
+   image_std_down = rebin(image_std, shape)  
 
-down_sampled = rebin(image_std, [491, 453])  # down_sampled to 60m  * 60m, equivalent to reef site size
+   return image_mean_down, image_std_down
+
 
 # make a color map of fixed colors
+# first plot the image of how std changes across locations
 cmap = mpl.colors.ListedColormap(['blue','green','red'])
 bounds=[0,5,15,50]
 norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
@@ -34,7 +68,7 @@ norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
 img = plt.imshow(image_std, #[0:50, 200:250], #interpolation='nearest',
                     cmap = cmap,norm=norm)
 
-# make a color bar of the mean sedimentation values
+# make a color bar of the std sedimentation values
 plt.colorbar(img,cmap=cmap,
                 norm=norm,boundaries=bounds,ticks=[5,15,50])
 
