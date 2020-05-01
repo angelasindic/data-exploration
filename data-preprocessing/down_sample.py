@@ -45,6 +45,7 @@ def down_sample(df, degree = 6):
    
    image_mean = np.array(df['mean']).reshape([2946, 2718])
    image_std = np.array(df['std']).reshape([2946, 2718])
+   image_missing = np.array(df['missing']).reshape([2946, 2718])
 
    
    shape = [2946 // degree, 2718 // degree]
@@ -55,25 +56,7 @@ def down_sample(df, degree = 6):
 
    # down_sampled to 60m  * 60m, equivalent to reef site size
    image_mean_down = rebin(image_mean, shape)   
-   image_std_down = rebin(image_std, shape)  
+   image_std_down = rebin(image_std, shape)
+   image_missing_down = rebin(image_missing, shape)
 
-   return image_mean_down, image_std_down
-
-
-# make a color map of fixed colors
-# first plot the image of how std changes across locations
-cmap = mpl.colors.ListedColormap(['blue','green','red'])
-bounds=[0,5,15,50]
-norm = mpl.colors.BoundaryNorm(bounds, cmap.N)
-
-# tell imshow about color map so that only set colors are used
-img = plt.imshow(image_std, #[0:50, 200:250], #interpolation='nearest',
-                    cmap = cmap,norm=norm)
-
-# make a color bar of the std sedimentation values
-plt.colorbar(img,cmap=cmap,
-                norm=norm,boundaries=bounds,ticks=[5,15,50])
-
-plt.savefig('image_std.jpg')
-plt.show()
-plt.title('mean sediment over time')
+   return image_mean_down, image_std_down, image_missing_down
