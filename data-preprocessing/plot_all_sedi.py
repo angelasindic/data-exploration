@@ -104,3 +104,9 @@ def plot_positions(df_all_dates): # year = '', location = []  # need to add year
     plt.savefig('sediment_per_location_overtime.jpg')
     
     return plt.show(). # can you return plt.show()?
+  
+'''
+def monthly_average():
+use smoothing to generate the monthly average, so there is no absent values
+
+'''
