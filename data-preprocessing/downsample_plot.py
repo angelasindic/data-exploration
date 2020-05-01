@@ -1,3 +1,9 @@
+# downsample the image based on the mean of each position, by a degree of 6
+# also because both dimensions [2946, 2718] are divisbile by 6
+# need to fix about the coastline, since after downsampling, some coastlines will be classified as water.
+# colour scale: red--> high sediment, green --> low sediment, blue --> no sediment
+# need to mask the land aresa with all NaNs
+
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
