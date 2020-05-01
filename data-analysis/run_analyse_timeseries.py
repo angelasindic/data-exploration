@@ -29,6 +29,8 @@ def main():
     nan_values = read_netcdf_results.count_nans(values)
     best_index = analyse_timeseries.get_best_index(nan_values)
     print(f"Index {best_index} has lowest count of nan values: {nan_values[best_index]}")
+    #ts_min, ts_max, ts_mean, ts_median, ts_std, ts_var = analyse_timeseries_basic_statistics.calculate_basic_stats(dates, values)
+    #analyse_timeseries_basic_statistics.plot_basic_stats(ts_var, 'variance per pixel', 'ts_var_test')
     ###########################
 
     ############# plot nan-values array #############
