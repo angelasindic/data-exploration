@@ -17,12 +17,8 @@ from stats import stats_custom, calculate_stats
 
 root_dir = '/data/results/batch_run'
 #df = read_data(root_dir, variable = 'spm_nechad2016', nlats = 2946, nlons = 2718)
-#df_total = calculate_stats(df)
-
-#df_all_dates = add_dates(df)
-
-
-#df_total = pd.read_csv('df_mean_std_missing')
+#df = add_dates(df)
+#df = calculate_stats(df).  #stats_custom script not working yet
 
 def down_sample(df, degree = 6):
    
