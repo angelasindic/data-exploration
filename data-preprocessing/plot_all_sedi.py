@@ -9,7 +9,7 @@ from sediment_all_positions import read_data
 
 df = read_data(root_dir = os.listdir(), nlats = 2946, nlons = 2718) # read in the csv data that has all the sediment
 
-def restrain_area(df, threshold = 5):
+def restrain_area(df, threshold_water = 5, threshold_land = 80):
   """
     Summary line.
     Extended description of function.
@@ -18,9 +18,13 @@ def restrain_area(df, threshold = 5):
     df : DateFrame
         the dataframe that contains date as one column and other columns representing sedimentation per location 
         
-    threshold : int
+    threshold_water : int
         this theshold is used to filter the pixels/positions based on the mean value of the sediment values.
         default value is 5. if the sediment values are lower than this treshold, it is classified as waters.
+        
+    threshold_land : int
+    this theshold is used to filter the pixels/positions based on the percentage of NaNs.
+    default value is 80. if the percetange of NaNs are higher than this treshold, it is classified as land.    
     
     Returns
     -------
@@ -37,10 +41,10 @@ def restrain_area(df, threshold = 5):
   df_index['missing'] = df1.isnull().sum() * 100 / len(df1) # represents xx percentage of the values are NaNs
 
   # replace the mean with NaNs, if the percentage of NaNs for the locaton exceeds 80%
-  df_index.loc[df_index['missing'] > 80, 'mean'] = float('nan') # if the percentage of NaN higher than 80%, then mean is NaN
+  df_index.loc[df_index['missing'] > threshold_land, 'mean'] = float('nan') # if the percentage of NaN higher than 80%, then mean is NaN
   
   # drop the pixel/positions that are either land or considered as waters
-  columns_to_drop = list(df_index[df_index['mean'] < threshold].index) + list(df_index[np.isnan(df_index['mean']) == True].index)
+  columns_to_drop = list(df_index[df_index['mean'] < threshold_water].index) + list(df_index[np.isnan(df_index['mean']) == True].index)
   df_relevant = df.drop(columns_to_drop, axis = 1)  
 
   return df_relevant
