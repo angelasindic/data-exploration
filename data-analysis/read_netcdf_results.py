@@ -60,7 +60,7 @@ def aggregate_timeline(root_dir, date, algorithm, thres):
         nans = np.count_nonzero(np.isnan(values))
         nan_ratio = nans/values.size
         if nan_ratio > thres:
-            print(f"Data array of data: {date} contains a {nan_ratio*100} of empty values, only {thres*100} is accepted")
+            print(f"Data array of data: {date} contains a {nan_ratio*100}% of empty values, only {thres*100}% is accepted")
         else:
             date_array.append(date)
             value_array.append(values)
@@ -90,24 +90,29 @@ def convert_to_dataframe(dates, data_grid, thres_col=0.9):
        The dataframe contains a time slice per column and one element (flattend) from the data_grid as row.
     """
     import pandas as pd
-    print(data_grid.shape)
-    print(data_grid.shape[0])
+
+    #print(data_grid.shape)
+    #print(data_grid.shape[0])
     data = data_grid.reshape(data_grid.shape[0], -1)
-    print(data.shape)
+    #print(data.shape)
     index = pd.DatetimeIndex(dates)
     df = pd.DataFrame(data, index=index)
-    print(len(df))
-    nan_count = df.isnull().sum(axis=1)
-    print(nan_count)
-    thres_value = len(df)*thres_col
-    print(f"using thres of minimum of {thres_value} non nan values per col")
-    df = df.dropna(thresh=thres_value, axis=1, how='all')
-    nan_count = df.isnull().sum(axis=1)
-    print(nan_count)
-    print(len(df))
-    df = df.interpolate()
-    print(df.head())
+    print(f"rows: {len(df)}, cols: {len(df.columns)}")
 
+    nan_count = df.isnull().sum(axis=1)
+    print(f"number of nan per date:\n{nan_count}")
+    if thres_col > 0.:
+        cols = len(df.columns)
+        thres_value = len(df)*thres_col
+        print(f"using a threshold of minimum of {thres_value} non nan values per col")
+        #axis 1 stands for col!!!!!
+        df = df.dropna(thresh=thres_value, axis=1, how='all')
+
+        nan_count = df.isnull().sum(axis=1)
+        print(f"ratio of number of cols dropped: {(cols-len(df.columns))/cols}")
+        print(f"number of nan per date after dropping cols:\n{nan_count}")
+    #df = df.interpolate()
+    print(f"rows: {len(df)}, cols: {len(df.columns)}")
     return df
 
 
