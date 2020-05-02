@@ -47,6 +47,25 @@ def calculate_stats(df):
 
   return df_total
 
+def add_mean_sediment(df):
+    """
+    Summary line.
+    Extended description of function.
+    Parameters
+    ----------
+    df : DateFrame
+        the dataframe that contains date as one column and other columns representing sedimentation per location
+    
+    Returns
+    -------
+    df : DataFrame
+        a new dataframe with an extra column that represents the mean sedimentation over the AOI for each timestamp
+    """
+  df['mean'] = df.drop('DateTime', axis=1).apply(lambda x: x.mean(), axis=1)
+  
+  return df
+ 
+
 
 def stats_custom(df, start_time = '2019-10', ending_time = '2020-03'):
   """
