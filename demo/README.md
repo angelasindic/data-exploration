@@ -22,3 +22,5 @@ stesp to generate the time series plot of a particular location
 3. after getting the sediment values for the respective position, ordered by the dates, some dates have missing values, NaNs, decide to aggregate to the monthly average and then interpolate the ones that are still missing (not so many missing values anymore after monthly aggregation)
 
 4. plot the time series (for a single position, or for multiple positions) for comparison of sediment over time, and over space
+
+5. since the memory of local desktop is not big enough to store all positions' information, 2 positions were selected in advanced and the data were downloaded locally for analysis/plotting
