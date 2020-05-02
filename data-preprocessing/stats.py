@@ -61,7 +61,7 @@ def add_mean_sediment(df):
     df : DataFrame
         a new dataframe with an extra column that represents the mean sedimentation over the AOI for each timestamp
     """
-  df['mean'] = df.drop('DateTime', axis=1).apply(lambda x: x.mean(), axis=1)
+  df['average'] = df.drop('DateTime', axis=1).apply(lambda x: x.mean(), axis=1)
   
   return df
  
