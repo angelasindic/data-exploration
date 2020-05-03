@@ -72,14 +72,14 @@ def main():
 
     ###########################
     ## provide parameter values:
-    root_dir = 'data/l2w'
-    #root_dir = '/data/results/batch_run'
+    #root_dir = 'data/l2w'
+    root_dir = '/data/results/batch_run'
 
     date = '' #all dates included.
     algorithm = 'spm_nechad2016'
 
-    outputdir = '/home/angela/transfer/as'
-    #outputdir = '/home/eouser/transfer/as'
+    #outputdir = '/home/angela/transfer/as'
+    outputdir = '/home/eouser/transfer/as'
     ###########################
 
     dates, values = read_netcdf_results.aggregate_timeline(root_dir, date, algorithm, thres=0.85)
