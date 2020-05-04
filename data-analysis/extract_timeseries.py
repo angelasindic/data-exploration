@@ -1,6 +1,6 @@
 import numpy as np
 import warnings
-import read_netcdf_results
+import read_netcdf_results, clustering
 
 def clean(time_data):
     """Sets negative and very high values to nan. Operates in place!! """
@@ -12,11 +12,19 @@ def print_stats(time_data):
     mean_values = np.nanmean(time_data, axis=0)
     min_values = np.nanmin(time_data, axis=0)
     max_values = np.nanmax(time_data, axis=0)
+    std_values = np.nanstd(time_data, axis=0)
 
-    # min_values = np.nan_to_num(min_values)
-    print(f"min: {np.nanmin(min_values.flatten(), axis=0)}")
-    print(f"max: {np.nanmax(max_values.flatten(), axis=0)}")
-    print(f"mean: {np.nanmean(mean_values.flatten(), axis=0)}")
+    min = np.nanmedian(min_values.flatten(), axis=0)
+    max= np.nanmedian(max_values.flatten(), axis=0)
+    mean= np.nanmedian(mean_values.flatten(), axis=0)
+    std= np.nanmedian(std_values.flatten(), axis=0)
+
+    print(f"min: {min}")
+    print(f"max: {max}")
+    print(f"mean: {mean}")
+    print(f"std: {std}")
+
+    return min, max, mean, std
 
 
 def determine_thres(values):
@@ -32,7 +40,8 @@ def determine_thres(values):
     print(f"size: {hv.size}\n std: {np.std(hv)}, mean: {np.mean(hv)}, meadian: {np.median(hv)}, max: {np.max(hv)}, min: {np.min(hv)}")
     print(f"count  < mean: {hv[hv <= np.mean(hv)].count()}, count > mean + std: {hv[hv > np.mean(hv) + np.std(hv)].count()}")
     print(f"rel mean: {hv[hv <= np.median(hv)].count() / hv.size}, rel mean+std {(hv[hv > (np.median(hv) + np.std(hv))].count()) / hv.size}")
-    thres = np.mean(hv) + np.std(hv)
+
+    thres = 2 * np.mean(hv)
 
     data[np.isnan(data)] = 0.
     data[data < thres] = 0.
@@ -49,7 +58,14 @@ def extract_data(time_data, indices):
     ts_1 = time_data[:, 2,278]
     print(ts_1.shape)
 
+def save_as_csv(values, output):
+    np.savetxt(output, values, delimiter=",")
 
+def read_from_csv(path):
+    from numpy import genfromtxt
+    return genfromtxt(path, delimiter=',')
+
+#from sklearn.cluster import KMeans
 def plot(data, output, title):
     import matplotlib.pyplot as plt
     from matplotlib.colors import LogNorm
@@ -63,8 +79,6 @@ def plot(data, output, title):
     fig.set_cmap(plt.cm.RdBu_r)
     plt.colorbar()
     plt.title(title)
-    # of cause not working on vm
-    #plt.show()
     plt.savefig(output)
     plt.close('all')
 
@@ -72,33 +86,59 @@ def main():
 
     ###########################
     ## provide parameter values:
+
     #root_dir = 'data/l2w'
     root_dir = '/data/results/batch_run'
 
     date = '' #all dates included.
     algorithm = 'spm_nechad2016'
 
-    #outputdir = '/home/angela/transfer/as'
+    #outputdir = '/home/angela/transfer/as/local'
     outputdir = '/home/eouser/transfer/as'
+
+    number_of_clusters = 8
     ###########################
 
     dates, values = read_netcdf_results.aggregate_timeline(root_dir, date, algorithm, thres=0.85)
 
     print_stats(values)
     clean(values)
-    # using averaged max
 
+    # using averaged max
     data = np.nanmax(values, axis=0)
 
     thres, indices, thres_data = determine_thres(data)
     print(f"thres: {thres}, indices shape: {indices.shape}")
-    extract_data(values, indices)
 
-    ####
-    # plot
-    title = f"Averaged Sedimentation Maximum above Threshold of {str(round(thres, 3))}"
-    plot(data, outputdir+ '/thres' + '_max_values.png', 'Averaged Sedimentation Maximum')
-    plot(thres_data, outputdir+ '/thres' + '_max_values_masked.png', title)
+    ### clustering
+    yPred = clustering.cluster(indices, number_of_clusters)
+    groups = clustering.get_groups(indices, yPred, number_of_clusters)
+
+    ###
+    ##extract dataframe per group and save it as csv
+    for cluster, cluster_indices in groups.items():
+
+        cluster_values = values[:, cluster_indices[:, 0], cluster_indices[:, 1]]
+        print(f"selection of size: {cluster_values.shape}")
+
+        df = read_netcdf_results.convert_to_dataframe(dates, cluster_values, thres_col=0.)
+        df.to_csv(outputdir + '/df_cluster_'+ str(cluster) + '.csv')
+
+
+    #df['empty_values'] = df.isnull().sum(axis=1)
+    #df['median'] = df.median(axis=1)
+    #df['mean'] = df.mean(axis=1)
+
+    # plots and save intermediate results
+    save_as_csv(indices, outputdir + '/indices.csv')
+    plot(data, outputdir + '/thres_max_values.png', 'Averaged Sedimentation Maximum')
+
+    title = f"Averaged Sedimentation Maximum masked with {str(round(thres, 3))}"
+    filename = f"{outputdir}/thres_max_values_masked_{str(round(thres))}.png"
+    print(filename)
+    plot(thres_data, filename, title)
+
+    clustering.plot_scatter(indices, yPred, number_of_clusters, outputdir)
 
 
 
