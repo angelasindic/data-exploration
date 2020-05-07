@@ -15,14 +15,11 @@ def print_stats(time_data):
     std_values = np.nanstd(time_data, axis=0)
 
     min = np.nanmedian(min_values.flatten(), axis=0)
-    max= np.nanmedian(max_values.flatten(), axis=0)
-    mean= np.nanmedian(mean_values.flatten(), axis=0)
-    std= np.nanmedian(std_values.flatten(), axis=0)
+    max = np.nanmedian(max_values.flatten(), axis=0)
+    mean = np.nanmedian(mean_values.flatten(), axis=0)
+    std = np.nanmedian(std_values.flatten(), axis=0)
 
-    print(f"min: {min}")
-    print(f"max: {max}")
-    print(f"mean: {mean}")
-    print(f"std: {std}")
+
 
     return min, max, mean, std
 
@@ -34,10 +31,10 @@ def determine_thres(values):
     print(f"nan values in data: {data[np.isnan(data)].count()}")
 
     hv = data[np.logical_not(np.isnan(data))]
-    print(f"nan values should now be zero: {hv[np.isnan(hv)].count()}")
-    print(f"nan values stay same in data: {data[np.isnan(data)].count()}")
+    #print(f"nan values should now be zero: {hv[np.isnan(hv)].count()}")
+    #print(f"nan values stay same in data: {data[np.isnan(data)].count()}")
 
-    print(f"size: {hv.size}\n std: {np.std(hv)}, mean: {np.mean(hv)}, meadian: {np.median(hv)}, max: {np.max(hv)}, min: {np.min(hv)}")
+    print(f"non nan values in data: {hv.size}\n std: {np.std(hv)}, mean: {np.mean(hv)}, meadian: {np.median(hv)}, max: {np.max(hv)}, min: {np.min(hv)}")
     print(f"count  < mean: {hv[hv <= np.mean(hv)].count()}, count > mean + std: {hv[hv > np.mean(hv) + np.std(hv)].count()}")
     print(f"rel mean: {hv[hv <= np.median(hv)].count() / hv.size}, rel mean+std {(hv[hv > (np.median(hv) + np.std(hv))].count()) / hv.size}")
 
@@ -96,25 +93,31 @@ def main():
     #outputdir = '/home/angela/transfer/as/local'
     outputdir = '/home/eouser/transfer/as'
 
-    number_of_clusters = 8
+    kernel_size = 7
+    number_of_clusters = 3
     ###########################
 
     dates, values = read_netcdf_results.aggregate_timeline(root_dir, date, algorithm, thres=0.85)
 
-    print_stats(values)
+    min, max, mean, std = print_stats(values)
+    print(f"min: {min}")
+    print(f"max: {max}")
+    print(f"mean: {mean}")
+    print(f"std: {std}")
+
     clean(values)
 
     # using averaged max
     data = np.nanmax(values, axis=0)
 
     thres, indices, thres_data = determine_thres(data)
-    print(f"thres: {thres}, indices shape: {indices.shape}")
+    print(f"Thresolding data with: {thres}, indices shape: {indices.shape}")
 
     ### clustering
-    yPred = clustering.cluster(indices, number_of_clusters)
-    groups = clustering.get_groups(indices, yPred, number_of_clusters)
+    print(f"Clustering with indices of size: {indices.shape}")
+    groups = clustering.cluster(indices, data.shape, kernal_size=kernel_size, number_of_clusters=number_of_clusters)
 
-    ###
+
     ##extract dataframe per group and save it as csv
     for cluster, cluster_indices in groups.items():
 
@@ -125,20 +128,16 @@ def main():
         df.to_csv(outputdir + '/df_cluster_'+ str(cluster) + '.csv')
 
 
-    #df['empty_values'] = df.isnull().sum(axis=1)
-    #df['median'] = df.median(axis=1)
-    #df['mean'] = df.mean(axis=1)
-
-    # plots and save intermediate results
+    print("plotting and saveing intermediate results")
     save_as_csv(indices, outputdir + '/indices.csv')
     plot(data, outputdir + '/thres_max_values.png', 'Averaged Sedimentation Maximum')
 
     title = f"Averaged Sedimentation Maximum masked with {str(round(thres, 3))}"
     filename = f"{outputdir}/thres_max_values_masked_{str(round(thres))}.png"
-    print(filename)
     plot(thres_data, filename, title)
 
-    clustering.plot_scatter(indices, yPred, number_of_clusters, outputdir)
+    clustering.plot(groups, outputdir)
+    clustering.plot_grid(groups, data.shape, outputdir + '/max_clusters.png')
 
 
 

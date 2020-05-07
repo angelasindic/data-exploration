@@ -91,16 +91,13 @@ def convert_to_dataframe(dates, data_grid, thres_col=0.9):
     """
     import pandas as pd
 
-    #print(data_grid.shape)
-    #print(data_grid.shape[0])
     data = data_grid.reshape(data_grid.shape[0], -1)
-    #print(data.shape)
     index = pd.DatetimeIndex(dates)
     df = pd.DataFrame(data, index=index)
-    print(f"rows: {len(df)}, cols: {len(df.columns)}")
+    #print(f"rows: {len(df)}, cols: {len(df.columns)}")
 
     nan_count = df.isnull().sum(axis=1)
-    print(f"number of nan per date:\n{nan_count}")
+    #print(f"number of nan per date:\n{nan_count}")
     if thres_col > 0.:
         cols = len(df.columns)
         thres_value = len(df)*thres_col
@@ -116,8 +113,6 @@ def convert_to_dataframe(dates, data_grid, thres_col=0.9):
     return df
 
 
-
-"""CAUTION sloooooow"""
 def count_nans(all_values):
     """
     Counts the number of nan values from the given array along the first/time axis.
@@ -136,13 +131,6 @@ def count_nans(all_values):
     return np.apply_along_axis(lambda x: np.count_nonzero(np.isnan(x)), 0, all_values)
 
 
-"""VERY SLOW, vectorize doesn't help, maybe running because iterating twice through the array for count and sum."""
-def count_nans_slow(all_values):
-    count = lambda x: np.count_nonzero(np.isnan(x).sum(axis=0))
-    vcount = np.vectorize(count)
-    return vcount(all_values)
-
-
 def get_datestr(filename): return '-'.join(filename.split('_')[-8:-5])
 
 
@@ -151,7 +139,3 @@ def scale(X, x_min, x_max):
     denom = X.max(axis=0) - X.min(axis=0)
     denom[denom==0] = 1
     return x_min + nom/denom
-
-###################### remove #################
-#dates, all_values = aggregate_timeline_excl_nan('data/l2w', '', 'spm_nechad2016')
-#convert_to_dataframe(dates, all_values)
