@@ -26,7 +26,7 @@ YOUR_API_KEY = "xxxxxxx"
 frequency= 24  # get daily data, each 24 hours
 start_date = '11-Jan-2020'
 end_date = '11-MAR-2020'
-api_key = 'e1634399315c4ec0b67203402202304'
+api_key = 'xxx'
 location_list = ['golfito']
 
 hist_weather_data = retrieve_hist_data(api_key,
